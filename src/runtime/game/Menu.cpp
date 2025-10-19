@@ -101,7 +101,7 @@ namespace Menu
 				Checkbox Triggerbot(&GROUP, "Triggerbot");
 				Checkbox Aimbot(&GROUP, "Aimbot");
 				#ifdef EXPERIMENTAL
-				Checkbox SoftSilentAim(&GROUP, "Soft Silent Aim");
+				Checkbox SoftSilentAim(&GROUP, "pSilent Aim");
 				Checkbox SilentRocket(&GROUP, "Silent Rocket");
 				#endif
 
