@@ -19,7 +19,9 @@ namespace GameplayMain
 	IL2CPP::List<IL2CPP::Object*>* gPlayerMoveCList = nullptr;
 	IL2CPP::List<IL2CPP::Object*>* gPhotonViewList = nullptr;
 	bool gLogRPC = false;
-
+	Vector3 Aimdirection = Vector3(0, 0, 0);
+	bool Checkiffound = false;
+	Quaternion SaveOrgcam;
 	IL2CPP::Object* networkTable;
 	bool processNoClipAll = false;
 	bool processCrashAll = false;
@@ -27,49 +29,41 @@ namespace GameplayMain
 
 	bool dontDespawnBot = false;
 
-	void HandleSoftSilent()
-	{
-		bool lbuttonDown = (GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0;
 
-		if (!lbuttonDown)
-		{
-			return;
-		}
+    void SilentAim() //soft silent aim to p-silent aim, i just changed few things here, no need to make a new function and make new shit, its just waste of time if i make new function and recrate silent aim, [i added 2 things and removed 1 thing, stored the aim direction and the flag thingy, removed that lookat thing cuzz its not for silent aim], and again if you complain that i remove soft silent aim, i think you should consider ending your life
+    {
+	    bool lbuttonDown = (GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0;
+    	if (!lbuttonDown)
+    	{
+    		return;
+    	}
+    	constexpr float maxRaycastDistance = 100.0f;
+    	Vector3 screenCenter(Screen::GetWidth() * 0.5f, Screen::GetHeight() * 0.5f, 0.0f);
+    	IL2CPP::Object* cam = Camera::GetMain();
+    	IL2CPP::Object* camTransform = Component::GetTransform(cam);
+    	IL2CPP::Object* myPlrTransform = PlayerMoveC::GetPlayerTransform(gMyPlayerMoveC);
+    	Vector3 myPos = Transform::GetPosition(myPlrTransform);
+    	float minDistance = FLT_MAX;
+    	float currentFOV = General::Aim::AimbotFOV.value;
+    	Vector3 aimOffset = General::Aim::AimHead.value ? Vector3(0.0f, 0.55f, 0.0f) : Vector3(0.0f, 0.0f, 0.0f);
+    	IL2CPP::Object* targetTransform = nullptr;
 
-		constexpr float maxRaycastDistance = 100.0f;
-		Vector3 screenCenter(Screen::GetWidth() * 0.5f, Screen::GetHeight() * 0.5f, 0.0f);
-
-		IL2CPP::Object* cam = Camera::GetMain();
-		IL2CPP::Object* camTransform = Component::GetTransform(cam);
-
-		IL2CPP::Object* myPlrTransform = PlayerMoveC::GetPlayerTransform(gMyPlayerMoveC);
-		Vector3 myPos = Transform::GetPosition(myPlrTransform);
-
-		float minDistance = FLT_MAX;
-		float currentFOV = General::Aim::AimbotFOV.value;
-		Vector3 aimOffset = General::Aim::AimHead.value ? Vector3(0.0f, 0.55f, 0.0f) : Vector3(0.0f, 0.0f, 0.0f);
-
-		IL2CPP::Object* targetTransform = nullptr;
-		gPlayerMoveCList->ForEach([&](IL2CPP::Object* player)
+    	gPlayerMoveCList->ForEach([&](IL2CPP::Object* player)
 		{
 			if (!player || PlayerMoveC::IsDead(player) || PlayerMoveC::IsMine(player) || !PlayerMoveC::IsEnemyTo(gMyPlayerMoveC, player))
 			{
 				return;
 			}
-
 			Vector3 pos = PlayerMoveC::GetPosition(player);
 			Vector3 plrScreenPos = Camera::WorldToScreenPoint(cam, pos);
 			float distance = Vector3::Distance(screenCenter, plrScreenPos);
-
 			if (plrScreenPos.Z <= 0 || distance >= minDistance || distance > currentFOV)
 			{
 				return;
 			}
-
 			Vector3 direction = Vector3::Normalized(pos - myPos);
 			Ray ray = { myPos, direction };
 			RaycastHit info;
-
 			if (Physics::Raycast(ray, &info, maxRaycastDistance))
 			{
 				IL2CPP::Object* bodyCollider = player->GetFieldRef<IL2CPP::Object*>("_bodyAimCollider");
@@ -81,12 +75,14 @@ namespace GameplayMain
 			}
 		});
 
-		if (targetTransform && minDistance < currentFOV)
-		{
-			Vector3 targetPos = Transform::GetPosition(targetTransform) + aimOffset;
-			Transform::LookAtVec(camTransform, targetPos);
-		}
-	}
+    	if (targetTransform && minDistance < currentFOV)
+    	{
+	    	Vector3 targetPos = Transform::GetPosition(targetTransform) + aimOffset;
+    		Aimdirection = Vector3::Normalized(targetPos - myPos);
+    		Checkiffound = true;
+    	}
+    }
+ 
 
 	void HandleGotoPlayers()
 	{
@@ -440,7 +436,7 @@ namespace GameplayMain
 			#ifdef EXPERIMENTAL
 			if (General::Aim::SoftSilentAim.value && gPlayerMoveCList != nullptr)
 			{
-				HandleSoftSilent();
+				SilentAim();
 			}
 			#endif
 
@@ -1209,6 +1205,22 @@ namespace GameplayMain
 		return gex;
 	}
 
+    $Hook(void, shotPressed, (IL2CPP::Object* MyPlayerMoveC, bool p)) //ngl sometimes ts doesnt work for some reason, you can improve it, but i wont, and if you complain about silent aim not working, its your fault, cuz im lazy to fix it and idc and btw fuck dsyq
+	{
+		if (Checkiffound && MyPlayerMoveC == gMyPlayerMoveC)
+		{
+			IL2CPP::Object* camTrans = Component::GetTransform(Camera::GetMain());
+			SaveOrgcam = Transform::GetRotation(camTrans);
+			Quaternion silentRotation = Quaternion::LookRotation(Aimdirection);
+			Transform::SetRotation(camTrans, silentRotation);
+			$CallOrig(shotPressed, MyPlayerMoveC, p);
+			Transform::SetRotation(camTrans, SaveOrgcam);
+			Checkiffound = false;
+			return;
+		}
+		$CallOrig(shotPressed, MyPlayerMoveC, p);
+	}
+
 	void INIT()
 	{
 		using namespace IL2CPP::ClassMapping;
@@ -1321,6 +1333,11 @@ namespace GameplayMain
 			GetClass("Player_move_c")->GetMethodByPattern(
 				{ "internal", "Void", nullptr, {nullptr, "String", "Int32", "Single", "Int32"} }
 			)
+		);
+
+		$RegisterHook(
+			shotPressed,
+			GetClass("Player_move_c")->GetMethod(0x37f)// thanks craze for giving me the firegun method index, i dont know shit about the game btw :>    [dont let leminare aka sean hopper and utopia see ts, they will skid everything]
 		);
 
 		$RegisterHook(
