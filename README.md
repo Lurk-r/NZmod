@@ -1,6 +1,6 @@
-# NZmod PC
+# NZmod
 Pixel Gun 3D pasteware debloated and rebranded! 🔥🔥 <br />
-This fork's goal is to remove all the useless ads, controversial wording and info as well as unhide some features of the mod
+This fork's goal is to remove all the useless ads, controversial wording & unhide some features of the mod
 
 ## Disclaimer
 
