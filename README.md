@@ -1,10 +1,14 @@
-# Nazi Mod PC
-Cool ass Pixel Gun 3D pasteware! 🔥🔥 <br />
-Just in keep in mind the codebase is a literal shithole. I don't really know c++ at the time I'm creating this.
+# NZmod PC
+Pixel Gun 3D pasteware debloated and rebranded! 🔥🔥 <br />
+This fork's goal is to remove all the useless ads, controversial wording and info as well as unhide some features of the mod
 
-Hopefully, this will be useful for others who wants to learn Unity Modding.
+## Disclaimer
+
+This project is for educational use and authorized security research only.  
+Only test on software/systems you own or have explicit permission to assess.
+
 ### Links
-- Discord: https://discord.gg/GCphUP98Xh
+- [Discord](https://dsc.gg/algea)
 
 ## Working with the project
 ### Building:
@@ -20,7 +24,7 @@ Hopefully, this will be useful for others who wants to learn Unity Modding.
 Build binaries will be generated in **out/build/{Build Configuration}**
 
 ### Debugging:
-- Select **nazimod-loader.exe** as startup item and Build Configuration to **x64-Debug**.
+- Select **NZ_Injector.exe** as startup item and Build Configuration to **x64-Debug**.
 - Start the project without debugging or hit up **CTRL + F5**.
 - Once Just-in-time debugger window appears, select the current Visual Studio workspace or whatever you wanna call it.
 
