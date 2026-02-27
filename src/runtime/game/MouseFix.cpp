@@ -91,7 +91,7 @@ namespace MouseFix
 		Screen::SetfullScreenMode(2);
 
 		$RegisterHook(
-			ClipCursorHOOK, 
+			ClipCursorHOOK,
 			ClipCursor
 		);
 
@@ -101,7 +101,7 @@ namespace MouseFix
 		);*/
 
 		$RegisterHook(
-			Update, 
+			Update,
 			GetClass("UICamera")->GetMethod("Update"),
 		);
 	}

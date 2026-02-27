@@ -780,7 +780,6 @@ namespace UIFramework
 				targetFillerColor = Vars::gMenuColorScheme.primaryHigh;
 			}
 
-
 			ImColor* holdFillerColor = Vars::colorContainer.Get(id, 0, Vars::gMenuColorScheme.primaryMed);
 			ImColor* holdGrabColor = Vars::colorContainer.Get(id, 1, Vars::gMenuColorScheme.primaryHigh);
 			float* sliderInterp = Vars::floatContainer.Get(id, 0, (frame_bb.Max.x - grab_bb.Max.x) / (frame_bb.Max.x - frame_bb.Min.x));
@@ -844,7 +843,6 @@ namespace UIFramework
 				*holdGrabColor,
 				360
 			);
-
 
 			return value_changed;
 		}
@@ -1038,7 +1036,6 @@ namespace UIFramework
 				const ImU32 col = ImGui::GetColorU32(ImGuiCol_ChildBg);
 				ImGui::RenderFrame(bb.Min, bb.Max, col, false, g.Style.FrameRounding);
 			}
-
 
 			ImU32 col = Vars::gMenuColorScheme.primaryLow;
 
@@ -1448,8 +1445,8 @@ namespace UIFramework
 
 		bool SaveConfig(const std::wstring& path)
 		{
-			bool hasExtension = path.find(L".nazicfg") != std::wstring::npos;
-			std::ofstream fileStream(!hasExtension ? path + L".nazicfg" : path);
+			bool hasExtension = path.find(L".nzcfg") != std::wstring::npos;
+			std::ofstream fileStream(!hasExtension ? path + L".nzcfg" : path);
 			try
 			{
 				json configData = json::object({});
@@ -1601,7 +1598,7 @@ namespace UIFramework
 					//ImGui::SetWindowFontScale(2.0f);
 					ImGui::SetCursorPosY(ImGui::GetStyle().FramePadding.y * 2.0f);
 					ImGui::PushFont(Vars::gExtraLargeFont);
-					ImGui::TextUnformatted("Nzi");
+					ImGui::TextUnformatted("NZ");
 					ImGui::PopFont();
 					//ImGui::SetWindowFontScale(1.0f);
 					Widgets::EndFrame();
@@ -1636,56 +1633,6 @@ namespace UIFramework
 			ImGui::End();
 		}
 	}
-
-	void DisclaimerWindow(const ImVec2& size, const std::function<void()>& onClose)
-	{
-		auto WindowFlags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar;
-		if (ImGui::Begin("#MainWindow", nullptr, WindowFlags))
-		{
-			ImVec2 itemSpacing = ImGui::GetStyle().ItemSpacing;
-			ImGui::SetWindowSize(size);
-			ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 0);
-
-			ImGui::BeginChild("credit-group", {-1.0, -1.0}, ImGuiChildFlags_AlwaysUseWindowPadding);
-			{
-				ImGui::PopStyleVar();
-				ImGui::PushFont(Vars::gLargeFont);
-				ImGui::TextUnformatted("Disclaimer");
-				ImGui::PopFont();
-				ImGui::Separator();
-
-				ImGui::TextUnformatted(
-					"Please, read carefuly!\n\n"
-
-					"Our cheat (Nazi Mod) is provided to you completely free of charge.\n"
-					"We do not engage in any transactions involving the sale of our cheat.\n"
-					"If you encounter any individual or entity claiming to sell our cheat, please be aware that it is unequivocally a scam.\n"
-					"We do not endorse or participate in any form of commercialization of our cheat software.\n\n"
-
-					"Additionally, we emphasize that our cheat is exclusively distributed through our official Discord server.\n"
-					"Any download links or sources claiming to offer our cheat outside of our Discord server could potentially contain malware or other\n"
-					"malicious software. We do not recommend obtaining our cheat from any other source apart from our official Discord server.\n\n"
-
-					"tdlr: Nazi Mod is free. If you bought this cheat from someone, you're cooked.\n"
-					"If you find Nazi Mod from any source other than our Discord server, it might be a malware or virus.\n\n"
-
-					"Thank you for your understanding!"
-				);
-
-				if (Widgets::Button("Nazi Mod Discord server (.gg/GCphUP98Xh)", UIComponents::ButtonSizeType::FLEXIBLE))
-				{
-					ShellExecuteA(0, 0, "https://discord.gg/GCphUP98Xh", 0, 0, SW_SHOW);
-				}
-				if (Widgets::Button("I understand.", UIComponents::ButtonSizeType::FLEXIBLE))
-				{
-					onClose();
-				}
-				ImGui::EndChild();
-			}
-		}
-		ImGui::End();
-	}
-
 	void SaveColorScheme(const std::string& path)
 	{
 		char colorSchemeBuffer[sizeof(MenuColorScheme)];
@@ -1820,7 +1767,6 @@ namespace UIFramework
 		UIBackend::START(OnLoad, OnUpdate);
 	}
 }
-
 
 namespace UIComponents
 {

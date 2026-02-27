@@ -11,7 +11,7 @@
 #include <Logger.hpp>
 #include <WinReg.hpp>
 #include "Test.hpp"
-#include <HttpService.hpp>
+// #include <HttpService.hpp>
 
 #define GameName "Pixel Gun 3D"
 #define ExecutableName "Pixel Gun 3D.exe"
@@ -226,20 +226,20 @@ int main(int argc, const char* argv[])
 {
 	std::wstring loaderPath;
 	GetLoaderPath(loaderPath);
-
+	/*
 	Logger::SetLogfilePath(
-		Logger::DebugOutputType::Stdout, 
+		Logger::DebugOutputType::Stdout,
 		loaderPath + L"\\Logs.txt",
 		std::ios_base::trunc
 	);
-
+	*/
 	//Testing::Start();
 	//return 0;
 
 	std::wstring runtimePath = loaderPath + L"\\" RUNTIME_DLL_FILENAME;
 	GuardCriticalAsset(runtimePath, RUNTIME_DLL_FILENAME);
 
-	winreg::RegKey key{HKEY_CURRENT_USER, L"SOFTWARE\\" PROJECT_NAME};
+	winreg::RegKey key{HKEY_CURRENT_USER, L"SOFTWARE\\Pixel Gun Team\\" PROJECT_NAME};
 	key.SetStringValue(L"LoaderPath", loaderPath);
 
 	LOG_INFO(
