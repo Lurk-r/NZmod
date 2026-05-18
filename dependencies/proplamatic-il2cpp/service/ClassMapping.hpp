@@ -22,6 +22,8 @@ namespace IL2CPP
 
 		void StartMapping();
 
+		void PutClass(const std::string& mapKeyname, const Class* klass);
+
 		Class* GetClass(const std::string& mapKeyname);
 	}
 }
