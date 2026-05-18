@@ -226,13 +226,13 @@ int main(int argc, const char* argv[])
 {
 	std::wstring loaderPath;
 	GetLoaderPath(loaderPath);
-	/*
+  /*
 	Logger::SetLogfilePath(
 		Logger::DebugOutputType::Stdout,
 		loaderPath + L"\\Logs.txt",
 		std::ios_base::trunc
 	);
-	*/
+  */
 	//Testing::Start();
 	//return 0;
 

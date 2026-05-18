@@ -29,11 +29,11 @@ namespace ConsoleManager
 
 	void InitializeLogger()
 	{
-	//	Logger::SetLogfilePath(
-		Logger::DebugOutputType::Stdout,
-			//		GetLoaderPath() + L"\\Logs.txt",
-			std::ios_base::app;
-	//	);
+		Logger::SetLogfilePath(
+			Logger::DebugOutputType::Stdout,
+			GetLoaderPath() + L"\\Logs.txt",
+			std::ios_base::app
+		);
 	}
 
 	void INIT()
@@ -41,6 +41,6 @@ namespace ConsoleManager
 		#ifdef CONSOLE_ENABLED
 		AllocateConsole();
 		#endif
-		InitializeLogger();
+		//InitializeLogger();
 	}
 }

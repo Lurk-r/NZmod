@@ -1217,7 +1217,6 @@ namespace UIFramework
 					InputString("Search", nullptr, searchBuffer, 255);
 					ImGui::Text("Result found: %i", totalResultFound);
 					ImGui::EndChild();
-
 				}
 				ImGui::PushFont(Vars::gMediumFont);
 				Frame(listId.c_str(), { -1, -1 });
@@ -1432,7 +1431,6 @@ namespace UIFramework
 				for (UIComponents::IConfigurable* component : configurableCompsList)
 				{
 					component->HandleConfigLoad(configData[component->label]);
-
 				}
 			}
 			catch (std::exception& err)
@@ -1633,6 +1631,56 @@ namespace UIFramework
 			ImGui::End();
 		}
 	}
+
+	void DisclaimerWindow(const ImVec2& size, const std::function<void()>& onClose)
+	{
+		auto WindowFlags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar;
+		if (ImGui::Begin("#MainWindow", nullptr, WindowFlags))
+		{
+			ImVec2 itemSpacing = ImGui::GetStyle().ItemSpacing;
+			ImGui::SetWindowSize(size);
+			ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 0);
+
+			ImGui::BeginChild("credit-group", {-1.0, -1.0}, ImGuiChildFlags_AlwaysUseWindowPadding);
+			{
+				ImGui::PopStyleVar();
+				ImGui::PushFont(Vars::gLargeFont);
+				ImGui::TextUnformatted("Disclaimer");
+				ImGui::PopFont();
+				ImGui::Separator();
+
+				ImGui::TextUnformatted(
+					"Please, read carefuly!\n\n"
+
+					"This (NZMod) is provided to you completely free of charge.\n"
+					"We do not engage in any transactions involving the sale of this.\n"
+					"If you encounter any individual or entity claiming to sell this, please be aware that it is unequivocally a scam.\n"
+					"We do not endorse or participate in any form of commercialization of this software.\n\n"
+
+					"Additionally, This is exclusively through our Discord server.\n"
+					"Any download links or sources claiming to offer this outside of our Discord server could potentially contain malware or other\n"
+					"malicious software. We do not recommend obtaining this from any other sources.\n\n"
+
+					"tdlr: NZMod is free. If you bought this from someone, you're cooked.\n"
+					"If you find NZMod from any source other than our Discord server, it might be a malware or virus.\n\n"
+
+					"Thank you for your understanding!"
+				);
+
+				if (Widgets::Button("Discord server", UIComponents::ButtonSizeType::FLEXIBLE))
+				{
+					ShellExecuteA(0, 0, "https://dsc.gg/algea", 0, 0, SW_SHOW);
+				}
+				if (Widgets::Button("I understand.", UIComponents::ButtonSizeType::FLEXIBLE))
+				{
+					onClose();
+				}
+				ImGui::EndChild();
+			}
+		}
+		ImGui::End();
+	}
+
 	void SaveColorScheme(const std::string& path)
 	{
 		char colorSchemeBuffer[sizeof(MenuColorScheme)];
@@ -1772,7 +1820,6 @@ namespace UIComponents
 {
 	void IRender::Render()
 	{
-
 	}
 
 	void IComponent::RenderChildren()
@@ -1820,7 +1867,6 @@ namespace UIComponents
 
 	void IConfigurable::HandleConfigLoad(const nlohmann::json& data)
 	{
-
 	}
 
 	nlohmann::json::object_t IConfigurable::HandleConfigSave()

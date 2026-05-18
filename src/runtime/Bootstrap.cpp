@@ -11,7 +11,10 @@
 #include "game/GameplayMain.hpp"
 #include "game/AntiAnalytics.hpp"
 #include "game/websocket/WebsocketCore.hpp"
+#include "game/TransactionHandler.hpp"
+
 #include <IL2CPP.hpp>
+
 namespace Bootstrap
 {
 	void ErrorMessageBox()
@@ -27,32 +30,40 @@ namespace Bootstrap
 			MB_OK | MB_ICONERROR
 		);
 	}
+
 	void INIT()
 	{
 		Sleep(2500);
+
 		ConsoleManager::INIT();
 		GdiplusManager::INIT();
 		FileDialogService::INIT();
 		TaskScheduler::INIT();
 		IL2CPP::INIT();
+
 		bool errowShown = false;
 		if(!ClassFinder::INIT())
 		{
 			ErrorMessageBox();
 			errowShown = true;
 		}
+
 		PointerFunctions::INIT();
+
 		if (gTotalFailedPointerDef > 0 && !errowShown)
 		{
 			ErrorMessageBox();
 		}
+
 		MouseFix::INIT();
 		#ifndef NO_FEATURE
 		Global::INIT();
 		AntiAnalytics::INIT();
 		GameplayMain::INIT();
 		WebsocketCore::INIT();
+		TransactionHandler::INIT();
 		#endif // !NO_FEATURE
+
 		Menu::INIT();
 	}
 }

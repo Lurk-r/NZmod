@@ -1,4 +1,4 @@
-{
+﻿{
   "configurations": [
     {
       "name": "x64-Debug",
@@ -22,11 +22,6 @@
       "ctestCommandArgs": "",
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "variables": [
-        {
-          "name": "VCPKG_PREFER_SYSTEM_LIBS",
-          "value": "True",
-          "type": "BOOL"
-        },
         {
           "name": "EXPERIMENTAL_CHEAT_FEATURE",
           "value": "True",

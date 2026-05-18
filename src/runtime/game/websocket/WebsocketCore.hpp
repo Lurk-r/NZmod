@@ -6,10 +6,16 @@
 namespace WebsocketCore
 {
 	using nlohmann::json;
+	using SocketCallback = void(*)(json& payload);
+
 	extern bool logWebsocket;
 	extern IL2CPP::Object* WSManagerInstance;
 
-	void QueuePackage(const std::string& msgType, const json& package, const std::function<void(json& response)>& onReceive = nullptr);
+	void QueuePackage(const std::string& msgType, const json& package, SocketCallback onReceive = nullptr);
+
+	void SubscribeSendEvent(const std::string_view& event, SocketCallback onSend);
+
+	void SubscribeReceiveEvent(const std::string_view& event, SocketCallback onReceive);
 
 	inline int PendingPackageCount();
 
@@ -26,7 +32,7 @@ namespace WebsocketCore
 		json package;
 
 		public:
-		virtual void SendPackage(const std::function<void(json& response)>& onRecieve = nullptr);
+		virtual void SendPackage(SocketCallback onRecieve = nullptr);
 	};
 
 	class ProgressUpdaterHelper : public ISocketHelper
@@ -42,6 +48,6 @@ namespace WebsocketCore
 
 		virtual void AddCommand(CommandID cmdId, int headerHexLength, const json& json_);
 
-		void SendPackage(const std::function<void(json& response)>& onRecieve = nullptr) override;
+		void SendPackage(SocketCallback onRecieve = nullptr) override;
 	};
 }

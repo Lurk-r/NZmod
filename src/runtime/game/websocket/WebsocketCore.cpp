@@ -2,6 +2,7 @@
 #include <IL2CPP.hpp>
 #include <utility>
 #include <Logger.hpp>
+#include <unordered_set>
 
 #include "MessageBuilder.hpp"
 #include "../import/PointerFunctions.hpp"
@@ -15,10 +16,10 @@ namespace WebsocketCore
 	struct SocketQueue
 	{
 		const int requestId;
-		const std::function<void(json& response)> onRecieve;
+		const SocketCallback onRecieve;
 		const json package;
 
-		SocketQueue(int requestId, const std::function<void(json& response)>& onRecieve, const json& package) :
+		SocketQueue(int requestId, SocketCallback onRecieve, const json& package) :
 			requestId(requestId),
 			onRecieve(onRecieve),
 			package(package)
@@ -29,8 +30,10 @@ namespace WebsocketCore
 	IL2CPP::Object* WSManagerInstance = nullptr;
 	std::vector<SocketQueue*> commandQueue;
 	std::vector<SocketQueue*> responseQueue;
+	std::unordered_map<std::string, std::unordered_set<SocketCallback>> sendSubscriber;
+	std::unordered_map<std::string, std::unordered_set<SocketCallback>> receiveSubscriber;
 
-	void QueuePackage(const std::string& msgType, const json& package, const std::function<void(json& response)>& onReceive)
+	void QueuePackage(const std::string& msgType, const json& package, SocketCallback onReceive)
 	{
 		assert(WSManagerInstance && "Queuing WebSocket package when WebSocketManager is not initialized.");
 
@@ -42,6 +45,32 @@ namespace WebsocketCore
 		));
 
 		WebSocketManager::SendEvent(WSManagerInstance, IL2CPP::String::Create(msgType));
+	}
+
+	void SubscribeSendEvent(const std::string_view& event, SocketCallback onSend)
+	{
+		const auto eventKey = std::string(event);
+		if (const auto subsSetIt = sendSubscriber.find(eventKey); subsSetIt != sendSubscriber.end())
+		{
+			subsSetIt->second.insert(onSend);
+		}
+		else
+		{
+			sendSubscriber.insert({eventKey, {onSend}});
+		}
+	}
+
+	void SubscribeReceiveEvent(const std::string_view& event, SocketCallback onReceive)
+	{
+		const auto eventKey = std::string(event);
+		if (const auto subsSetIt = receiveSubscriber.find(eventKey); subsSetIt != receiveSubscriber.end())
+		{
+			subsSetIt->second.insert(onReceive);
+		}
+		else
+		{
+			receiveSubscriber.insert({eventKey, {onReceive}});
+		}
 	}
 
 	inline int PendingPackageCount()
@@ -85,22 +114,25 @@ namespace WebsocketCore
 			return buffer;
 		}
 
-		static std::string command;
-		std::string sid;
-		int reqId = 0;
+		static std::string command = "";
 		std::string data{ buffer->GetVectorPointer(), buffer->GetVectorPointer() + buffer->GetLength() };
 
 		if (buffer->Get(0) == '{')
 		{
+			int reqId = 0;
 			json parsedData = json::parse(data);
 
-			if (parsedData.contains("sid"))
-			{
-				sid = parsedData["sid"];
-			}
 			if (parsedData.contains("req_id"))
 			{
 				reqId = parsedData["req_id"];
+			}
+
+			if (const auto& eventSet = receiveSubscriber.find(command); eventSet != receiveSubscriber.end())
+			{
+				for (const auto& subscriber : eventSet->second)
+				{
+					subscriber(parsedData);
+				}
 			}
 
 			if (!responseQueue.empty())
@@ -137,6 +169,7 @@ namespace WebsocketCore
 		else
 		{
 			command = data;
+			std::erase(command, '\"');
 		}
 
 		return buffer;
@@ -151,21 +184,24 @@ namespace WebsocketCore
 		}
 
 		static std::string command = "";
-		std::string sid = "";
-		int reqId = -1;
 		std::string data{ buffer->GetVectorPointer(), buffer->GetVectorPointer() + buffer->GetLength() };
 
 		if (buffer->Get(0) == '{')
 		{
-			json parsedData = json::parse(data);
+			int reqId = -1;
 
-			if (parsedData.contains("sid"))
-			{
-				sid = parsedData["sid"];
-			}
+			json parsedData = json::parse(data);
 			if (parsedData.contains("req_id"))
 			{
 				reqId = parsedData["req_id"];
+			}
+
+			if (const auto& eventSet = sendSubscriber.find(command); eventSet != sendSubscriber.end())
+			{
+				for (const auto& subscriber : eventSet->second)
+				{
+					subscriber(parsedData);
+				}
 			}
 
 			if (!commandQueue.empty())
@@ -193,18 +229,12 @@ namespace WebsocketCore
 				LOG_NOTAG("[Send | %s] \n%s\n", command.c_str(), parsedData.dump().c_str());
 			}
 
-			return $CallOrig(SocketSend, 
-				_this, 
-				Encoding::GetBytes(
-					Encoding::GetUTF8(), 
-					IL2CPP::String::Create(parsedData.dump())
-				), 
-				idfk
-			);
+			buffer = Encoding::GetBytes(Encoding::GetUTF8(), IL2CPP::String::Create(parsedData.dump()));
 		}
 		else
 		{
 			command = data;
+			std::erase(command, '\"');
 		}
 
 		return $CallOrig(SocketSend, _this, buffer, idfk);
@@ -230,7 +260,7 @@ namespace WebsocketCore
 		);
 	}
 
-	void ISocketHelper::SendPackage(const std::function<void(json& response)>& onRecieve)
+	void ISocketHelper::SendPackage(SocketCallback onRecieve)
 	{
 		QueuePackage(this->eventType, this->package, onRecieve);
 	}
@@ -279,7 +309,7 @@ namespace WebsocketCore
 		this->package.push_back(MessageBuilder::BuildCommand(cmdId, headerHexLength, json_));
 	}
 
-	void ProgressUpdaterHelper::SendPackage(const std::function<void(json& response)>& onRecieve)
+	void ProgressUpdaterHelper::SendPackage(SocketCallback onRecieve)
 	{
 		QueuePackage(this->eventType, MessageBuilder::BuildSnapshot(this->package), onRecieve);
 	}
