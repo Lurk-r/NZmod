@@ -1,6 +1,10 @@
 # NZmod
-Pixel Gun 3D pasteware debloated and rebranded! 🔥🔥 <br />
-This fork's goal is to remove all the useless ads, controversial wording & unhide some features of the mod
+Pixel Gun 3D pasteware debloated and rebranded! 🔥🔥<br />
+This fork's goal is
+- Remove all the useless ads watermark
+- Remove controversial wording
+- Unhide/Enable some features of the mod
+- Disable obfs
 
 ## Disclaimer
 
@@ -12,7 +16,7 @@ Only test on software/systems you own or have explicit permission to assess.
 
 ## Working with the project
 ### Building:
-- Get [Visual Studio](https://visualstudio.microsoft.com/downloads/) 
+- Get [Visual Studio](https://visualstudio.microsoft.com/downloads)
 - Select the following components when setting up Visual Studio installation:
     - CMake
     - MSVC v143 or newer
@@ -24,7 +28,7 @@ Only test on software/systems you own or have explicit permission to assess.
 Build binaries will be generated in **out/build/{Build Configuration}**
 
 ### Debugging:
-- Select **NZ_Injector.exe** as startup item and Build Configuration to **x64-Debug**.
+- Select **nzmod-loader.exe** as startup item and Build Configuration to **x64-Debug**.
 - Start the project without debugging or hit up **CTRL + F5**.
 - Once Just-in-time debugger window appears, select the current Visual Studio workspace or whatever you wanna call it.
 
