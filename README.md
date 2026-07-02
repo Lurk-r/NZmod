@@ -1,7 +1,7 @@
 # NZmod
 Pixel Gun 3D pasteware debloated and rebranded! 🔥🔥<br />
 This fork's goal is
-- Add some info/note on some features
+- Add some info/note for some features
 - Remove all the useless ads watermark
 - Remove controversial wording
 - Unhide/Enable some features of the mod
@@ -12,8 +12,7 @@ This fork's goal is
 This project is for educational use and authorized security research only.  
 Only test on software/systems you own or have explicit permission to assess.
 
-### Links
-- [Discord](https://dsc.gg/algea)
+### Links: [Discord](https://dsc.gg/algea)
 
 ## Working with the project
 ### Building:
