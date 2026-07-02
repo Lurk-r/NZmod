@@ -65,5 +65,13 @@ namespace Bootstrap
 		#endif // !NO_FEATURE
 
 		Menu::INIT();
+
+		LOG_INFO(
+			"Keybinds to open:\n"
+			"- F1\n"
+			"- Fn + F1\n"
+			"- Right Ctrl\n"
+			"- Right Alt\n"
+		);
 	}
 }

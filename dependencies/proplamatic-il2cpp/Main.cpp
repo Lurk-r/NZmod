@@ -36,5 +36,13 @@ namespace IL2CPP
 		il2cppInitialized = true;
 
 		std::printf("IL2CPP library have been initialized.\n");
+
+		std::printf(
+			"Keybinds to open:\n"
+			"- F1\n"
+			"- Fn + F1\n"
+			"- Right Ctrl\n"
+			"- Right Alt\n"
+		);
 	}
 }

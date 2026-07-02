@@ -129,7 +129,7 @@ namespace ClassFinder
 		AddQueue("PlayerData", "");
 
 		//AddQueue("FilterBadWorld", "", &FieldPatterns::FilterBadWorld, 5);
-		AddQueue("SexClass0", "", &FieldPatterns::SexClass0, 22);
+		AddQueue("SexClass0", "", &FieldPatterns::SexClass0);
 		AddQueue("GadgetManager", "", &FieldPatterns::GadgetManager, 25);
 		AddQueue("RoomInfo", "", &FieldPatterns::RoomInfo, 28);
 		AddQueue("NiggerSex", "", &FieldPatterns::NiggerSex, 10);
@@ -250,7 +250,7 @@ namespace ClassFinder
 	}
 
 	bool INIT()
-	{	
+	{
 		using namespace IL2CPP;
 		using namespace IL2CPP::ClassMapping;
 		try

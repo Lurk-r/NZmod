@@ -18,7 +18,6 @@ namespace ConsoleManager
 
 	void AllocateConsole()
 	{
-
 		AllocConsole();
 		SetConsoleTitle("Logs");
 		SetConsoleCtrlHandler(OnConsoleClose, TRUE);
@@ -41,6 +40,6 @@ namespace ConsoleManager
 		#ifdef CONSOLE_ENABLED
 		AllocateConsole();
 		#endif
-		//InitializeLogger();
+	//	InitializeLogger();
 	}
 }

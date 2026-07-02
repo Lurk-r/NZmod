@@ -26,6 +26,9 @@ namespace WebsocketCore
 		{}
 	};
 
+
+	bool dumpMasterkey = false;
+	bool dumpChipertext = true;
 	bool logWebsocket = false;
 	IL2CPP::Object* WSManagerInstance = nullptr;
 	std::vector<SocketQueue*> commandQueue;
@@ -92,6 +95,17 @@ namespace WebsocketCore
 	void Reload()
 	{
 		QueuePackage("update_progress", json::object({}));
+	}
+
+	std::string ToHexString(const uint8_t* data, size_t length)
+	{
+		std::stringstream ss;
+		for(int i=0; i< length; ++i)
+		{
+			ss << std::hex << static_cast<int>(data[i]);
+		}
+
+		return ss.str();
 	}
 
 	$Hook(int, SendSocketMessage, (IL2CPP::Object* _this, IL2CPP::String* messageType, IL2CPP::Object* jsonObject))
@@ -238,6 +252,21 @@ namespace WebsocketCore
 		}
 
 		return $CallOrig(SocketSend, _this, buffer, idfk);
+	}
+
+	$Hook(void, AesFacadeCtor, (IL2CPP::Object* _this, void* masterkey))
+	{
+		// if (dumpMasterkey)
+		// {
+		// 	std::string masterkeyHex = ToHexString(
+		// 		reinterpret_cast<uint8_t *>(masterkey->GetVectorPointer()),
+		// 		masterkey->GetLength()
+		// 	);
+		//
+		// 	LOG_NOTAG("[Receive chipertext | %s] \n%s\n", masterkeyHex.c_str());
+		// }
+
+		$CallOrig(AesFacadeCtor, _this, masterkey);
 	}
 
 	void INIT()

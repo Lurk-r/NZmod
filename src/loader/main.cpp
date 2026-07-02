@@ -10,7 +10,6 @@
 #include <cstdlib>
 #include <Logger.hpp>
 #include <WinReg.hpp>
-#include "Test.hpp"
 // #include <HttpService.hpp>
 
 #define GameName "Pixel Gun 3D"
@@ -243,7 +242,7 @@ int main(int argc, const char* argv[])
 	key.SetStringValue(L"LoaderPath", loaderPath);
 
 	LOG_INFO(
-		"Keybinds to open the menu:\n"
+		"Keybinds to open:\n"
 		"- F1\n"
 		"- Fn + F1\n"
 		"- Right Ctrl\n"
