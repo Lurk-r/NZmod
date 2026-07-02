@@ -1325,7 +1325,7 @@ namespace Menu
 					"Pixel Gun doesn't support slim mc skin. Don't import them\n"
 					"or the skin will break.\n\n"
 					"Custom Skin with 64x64 resolution will be converted\n"
-					"into 64x32 automatically."
+					"into 64x32 automatically.\nClick Edit > Save that skin ingame after added incase bugged."
 				);
 
 				Button ImportSkin(&GROUP, "Import Skin");
@@ -1393,7 +1393,7 @@ namespace Menu
 			namespace CustomCapeImporter
 			{
 				Group GROUP(&TAB, "Custom Cape Importer", UIComponents::GroupPlacementType::RIGHT);
-				Text NOTE(&GROUP,"Supported Cape Resolution: 12x16.");
+				Text NOTE(&GROUP,"Supported Cape Resolution: 12x16.\nClick Edit > Save that cape ingame after added incase bugged.");
 
 				Button ImportCape(&GROUP, "Import Cape");
 

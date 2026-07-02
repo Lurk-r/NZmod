@@ -475,12 +475,12 @@ namespace ExperienceController
 {
 	Pointer<int(IL2CPP::Object* experienceController)> GetCurrentLevel(
 		"ExperienceController",
-		0x6
+		0x7
 	);
 
 	Pointer<void(IL2CPP::Object* experienceController, int value, ExpObtainCause reason, IL2CPP::Object* dictionary, IL2CPP::Object* sex)> AddExperience(
 		"ExperienceController",
-		0x1c
+		{"internal", "Void", nullptr, {"Int32", "ENUM", "Dictionary`2", nullptr}}
 	);
 }
 
