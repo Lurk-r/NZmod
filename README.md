@@ -12,7 +12,7 @@ This fork's goal is
 This project is for educational use and authorized security research only.  
 Only test on software/systems you own or have explicit permission to assess.
 
-### Links: [Discord](https://dsc.gg/algea)
+### Links with support & prebuilt: [Discord](https://dsc.gg/algea)
 
 ## Working with the project
 ### Building:
@@ -34,7 +34,8 @@ Build binaries will be generated in **out/build/{Build Configuration}**
 
 
 ## Updating pattern to keep up with the game update
-*TODO Guide*
+From original dev:
+> You can open [PATTERN.md](./PATTERN.md) to learn how to update pattern used to find classes, functions and other stuff, as well as knowing how the pattern matching works in the project. Though the guide is vibewritten and it's primarily used for LLM to help update broken pattern (lol).
 
 ## Licensing
 This project is licensed under the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html). 
