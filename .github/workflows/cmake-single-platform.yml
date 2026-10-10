@@ -10,7 +10,7 @@ on:
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Release
+  BUILD_TYPE: RelWithDebInfo
   DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
   TARGET_ARCH: amd64
   BUILD_PATH: ${{github.workspace}}/build
@@ -18,10 +18,9 @@ env:
 
 jobs:
   build:
-    # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
-    # You can convert this to a matrix build if you need cross-platform coverage.
-    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: windows-latest
+    permissions:
+      contents: write
 
     steps:
     - uses: actions/checkout@v4
@@ -45,15 +44,33 @@ jobs:
     - name: Create Artifact Archive
       run: |
           $commit_hash=$(echo "${{ github.sha }}" | cut -c1-7)
-          Compress-Archive -Path "${{env.BUILD_PATH}}/nazimod-loader.exe", "${{env.BUILD_PATH}}/nazimod-runtime.dll", "${{env.BUILD_PATH}}/assets/" -DestinationPath "${{github.workspace}}/nazimodpc-$commit_hash.zip"
-          Compress-Archive -Path "${{env.EXPERIMENTAL_BUILD_PATH}}/nazimod-loader.exe", "${{env.EXPERIMENTAL_BUILD_PATH}}/nazimod-runtime.dll", "${{env.EXPERIMENTAL_BUILD_PATH}}/assets/" -DestinationPath "${{github.workspace}}/nazimodpc-experimental-$commit_hash.zip"
+          Compress-Archive -Path "${{env.BUILD_PATH}}/nzmod-loader.exe", "${{env.BUILD_PATH}}/nzmod-runtime.dll", "${{env.BUILD_PATH}}/assets/" -DestinationPath "${{github.workspace}}/nzmodpc-$commit_hash.zip"
+          Compress-Archive -Path "${{env.EXPERIMENTAL_BUILD_PATH}}/nzmod-loader.exe", "${{env.EXPERIMENTAL_BUILD_PATH}}/nzmod-runtime.dll", "${{env.EXPERIMENTAL_BUILD_PATH}}/assets/" -DestinationPath "${{github.workspace}}/nzmodpc-experimental-$commit_hash.zip"
+          Compress-Archive -Path "${{env.BUILD_PATH}}/nzmod-loader.pdb", "${{env.BUILD_PATH}}/nzmod-runtime.pdb" -DestinationPath "${{github.workspace}}/nzmodpc-symbols-$commit_hash.zip"
+          Compress-Archive -Path "${{env.EXPERIMENTAL_BUILD_PATH}}/nzmod-loader.pdb", "${{env.EXPERIMENTAL_BUILD_PATH}}/nzmod-runtime.pdb" -DestinationPath "${{github.workspace}}/nzmodpc-experimental-symbols-$commit_hash.zip"
 
-    - name: Upload Build Artifact
+    - name: Upload Build Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: my-app-build
-        path: "${{github.workspace}}/artifact.zip"
+        name: nzmodpc-builds
+        path: |
+          ${{github.workspace}}/nzmodpc-*.zip
         retention-days: 7
+
+    - name: Upload to GitHub Release
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: rolling
+        name: Continuous Build
+        body: |
+          Automated continuous release for commit ${{ github.sha }}.
+          ${{ github.event.head_commit.message }}
+        prerelease: true
+        files: |
+          ${{github.workspace}}/nzmodpc-*.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Send to Discord Webhook
       run: |
@@ -84,8 +101,8 @@ jobs:
           }
           "@
 
-          curl -F "file1=@${{github.workspace}}/nazimodpc-$commit_hash.zip" `
-               -F "file2=@${{github.workspace}}/nazimodpc-experimental-$commit_hash.zip" `
+          curl -F "file1=@${{github.workspace}}/nzmodpc-$commit_hash.zip" `
+               -F "file2=@${{github.workspace}}/nzmodpc-experimental-$commit_hash.zip" `
                -F "payload_json=$json_payload" `
                ${{env.DISCORD_WEBHOOK_URL}}
 
