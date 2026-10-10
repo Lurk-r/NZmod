@@ -10,7 +10,7 @@ This fork's goal is
 ## Disclaimer
 
 This project is for educational use and authorized security research only.  
-Only test on software/systems you own or have explicit permission to assess.
+Only test on software/systems you own or have explicit permission to access.
 
 ### Links with support & prebuilt: [Discord](https://dsc.gg/algea)
 
