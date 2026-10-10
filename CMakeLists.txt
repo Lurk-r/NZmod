@@ -1,4 +1,4 @@
-﻿cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.8)
 
 # Enable Hot Reload for MSVC compilers if supported.
 if (POLICY CMP0141)
@@ -33,6 +33,7 @@ add_compile_definitions(
 	LOGGER_ERROR_DEBUG_BREAK
 	LOGGER_TRACE_ERROR
 	LOGGER_TRACE_WARNING
+	UNITY_2023_3
 	_DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR
 	$<$<CONFIG:Debug>:OE_DEBUG>
     $<$<CONFIG:RelWithDebInfo>:OE_DEBUG>
