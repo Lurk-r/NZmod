@@ -84,8 +84,20 @@ namespace Themes
 		ImColor(215, 215, 215),
 		ImColor(255, 255, 255)
 	};
-}
+    const MenuColorScheme retrowave =
+    { // non existence
+        ImColor(0, 0, 0),
+        ImColor(9, 0, 33),
+        ImColor(12, 0, 50),
 
+        ImColor(50, 0, 136),
+        ImColor(228, 0, 124),
+        ImColor(255, 189, 57),
+
+        ImColor(215, 215, 215),
+        ImColor(255, 255, 255)
+    };
+}
 namespace UIFramework
 {
 	namespace Vars

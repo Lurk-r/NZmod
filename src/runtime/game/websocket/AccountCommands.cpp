@@ -56,11 +56,12 @@ namespace AccountCommands
 
 	void UnlockRGBWeaponSet(int level, int rarity)
 	{
-		static std::array<std::string, 3> rgbWeaponsID =
+		static std::array<std::string, 4> rgbWeaponsID =
 		{
 			"new_well_pistol",
 			"fps_destroyer",
-			"achieve_hunter"
+			"achieve_hunter",
+			"plasma_orbit",
 		};
 
 		WebsocketCore::ProgressUpdaterHelper helper;

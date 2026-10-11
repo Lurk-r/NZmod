@@ -1771,10 +1771,10 @@ namespace UIFramework
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		ImGuiStyle& style = ImGui::GetStyle();
-		style.WindowRounding = 10;
-		style.ChildRounding = 10;
-		style.FrameRounding = 8;
-		style.TabRounding = 10;
+		style.WindowRounding = 0; // 10
+		style.ChildRounding = 0; // 10
+		style.FrameRounding = 0; // 8
+		style.TabRounding = 0; // 10
 
 		style.WindowPadding = ImVec2(10.0, 10.0);
 		style.ItemSpacing = ImVec2(10.0, 10.0);

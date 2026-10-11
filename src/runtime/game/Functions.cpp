@@ -164,8 +164,6 @@ namespace ContentKeyRegister
 			"new_well_pistol",
 			"fps_destroyer",
 			"achieve_hunter",
-			"portal_rad_st",
-			"portal_ess",
 			"Weapon998_wstlnds_fatal_melter",
 			"Weapon999_wstlnds_dual_anger",
 			"Weapon1000_wstlnds_brutal_thinner",
@@ -217,6 +215,7 @@ namespace ContentKeyRegister
 			"gadget_mh_mech2",
 			"gadget_mh_mech3",
 			"gadget_hook_monster",
+			"avatar_orbit_wanderer",
 		};
 
 		// ik this is a dumb check but this barely affect overall performance anyways

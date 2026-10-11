@@ -1584,6 +1584,7 @@ namespace Menu
 					Themes::darkBlue,
 					Themes::darkGreen,
 					Themes::darkLavenderBlue,
+					Themes::retrowave, // non
 					{
 						ImColor(0, 0, 0),
 						ImColor(9, 0, 33),
@@ -1599,10 +1600,10 @@ namespace Menu
 				};
 
 				const std::vector<std::string> themseList = {
+					"Retrowave",
 					"Dark Blue",
 					"Dark Green",
 					"Dark Purple",
-					"Retrowave"
 				};
 
 				Browser Themes(&GROUP, "Themes", themseList);
@@ -2057,7 +2058,7 @@ namespace Menu
 
 		UIFramework::INIT(
 			Convert::ToString(GetLoaderPath()).append("\\assets"),
-			Themes::darkLavenderBlue,
+			Themes::retrowave, // darkLavenderBlue
 			OnUpdate
 		);
 	}
