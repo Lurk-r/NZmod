@@ -1,5 +1,5 @@
 ## CONTRIBUTORS WELCOME
-Similar to original, this fork is broken and on hiatus after PG3D rapidly patching mods so if you can help in fixing and updating it to latest PG3D version then please open a [Pull request](https://github.com/Lurk-r/NZmod/pulls).
+Similar to original, this fork is broken and on hiatus after PG3D rapidly patching mods so if you can help in fixing and updating it to latest PG3D versions then please open a [Pull request](https://github.com/Lurk-r/NZmod/pulls) to commit fixes.
 # NZmod
 Pixel Gun 3D pasteware debloated and rebranded! 🔥🔥<br />
 This fork's goals
